@@ -6,13 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.dylibso.chicory.wasm.Parser;
 import com.dylibso.chicory.wasm.WasmModule;
+import com.dylibso.chicory.wasm.corpus.WasmCorpus;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class StoreTest {
 
     private static WasmModule loadModule(String fileName) {
-        return Parser.parse(WasmModuleTest.class.getResourceAsStream("/" + fileName));
+        return Parser.parse(WasmCorpus.getCompiledAsStream(fileName));
     }
 
     @Test
@@ -30,7 +31,7 @@ public class StoreTest {
 
     @Test
     public void exportsShouldBeRegistered() {
-        var instance = Instance.builder(loadModule("compiled/exports.wat.wasm")).build();
+        var instance = Instance.builder(loadModule("exports.wat.wasm")).build();
         var store = new Store();
         String moduleName = "exports-module";
         store.register(moduleName, instance);
@@ -62,7 +63,7 @@ public class StoreTest {
     public void instantiateShouldRegisterInstance() {
         var store = new Store();
         String moduleName = "exports-module";
-        var inst = store.instantiate(moduleName, loadModule("compiled/exports.wat.wasm"));
+        var inst = store.instantiate(moduleName, loadModule("exports.wat.wasm"));
         assertNotNull(inst);
 
         // memories
@@ -93,10 +94,10 @@ public class StoreTest {
         var store = new Store();
 
         String name1 = "exports-module-1";
-        store.instantiate(name1, loadModule("compiled/exports.wat.wasm"));
+        store.instantiate(name1, loadModule("exports.wat.wasm"));
 
         String name2 = "exports-module-2";
-        store.instantiate(name2, loadModule("compiled/exports.wat.wasm"));
+        store.instantiate(name2, loadModule("exports.wat.wasm"));
 
         var names = List.of(name1, name2);
 
@@ -139,7 +140,7 @@ public class StoreTest {
         store.instantiate(
                 name1,
                 imports ->
-                        Instance.builder(loadModule("compiled/exports.wat.wasm"))
+                        Instance.builder(loadModule("exports.wat.wasm"))
                                 .withImportValues(imports)
                                 .withStart(false)
                                 .build());
@@ -148,7 +149,7 @@ public class StoreTest {
         store.instantiate(
                 name2,
                 imports ->
-                        Instance.builder(loadModule("compiled/exports.wat.wasm"))
+                        Instance.builder(loadModule("exports.wat.wasm"))
                                 .withImportValues(imports)
                                 .build());
 

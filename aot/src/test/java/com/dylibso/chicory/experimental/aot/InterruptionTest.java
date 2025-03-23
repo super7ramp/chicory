@@ -11,16 +11,14 @@ import com.dylibso.chicory.runtime.Instance;
 import com.dylibso.chicory.wasm.ChicoryException;
 import com.dylibso.chicory.wasm.Parser;
 import com.dylibso.chicory.wasm.WasmModule;
+import com.dylibso.chicory.wasm.corpus.WasmCorpus;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.Test;
 
 public class InterruptionTest {
     @Test
     public void shouldInterruptLoop() throws InterruptedException {
-        var module =
-                Parser.parse(
-                        InterruptionTest.class.getResourceAsStream(
-                                "/compiled/infinite-loop.c.wasm"));
+        var module = Parser.parse(WasmCorpus.getCompiledAsStream("infinite-loop.c.wasm"));
         var instance = Instance.builder(module).withMachineFactory(AotMachine::new).build();
 
         var function = instance.export("run");
@@ -29,8 +27,7 @@ public class InterruptionTest {
 
     @Test
     public void shouldInterruptCall() throws InterruptedException {
-        var module =
-                Parser.parse(InterruptionTest.class.getResourceAsStream("/compiled/power.c.wasm"));
+        var module = Parser.parse(WasmCorpus.getCompiledAsStream("power.c.wasm"));
         var instance = Instance.builder(module).withMachineFactory(AotMachine::new).build();
         var function = instance.export("run");
         assertInterruption(() -> function.apply(100), functionIdx(module, "run"));

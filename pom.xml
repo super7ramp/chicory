@@ -616,6 +616,9 @@
                 <module name="UnusedLocalVariable"/>
                 <module name="UpperEll"/>
               </module>
+              <module name="BeforeExecutionExclusionFileFilter">
+                <property name="fileNamePattern" value="module\-info\.java$"/>
+              </module>
             </module>
           </checkstyleRules>
         </configuration>

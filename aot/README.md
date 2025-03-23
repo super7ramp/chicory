@@ -15,8 +15,9 @@ To enable use the AotMachine factory when building the module:
 // ...
 
 import com.dylibso.chicory.wasm.Parser;
+import com.dylibso.chicory.wasm.corpus.WasmCorpus;
 import com.dylibso.chicory.experimental.aot.AotMachine;
 // ...
-var is = ClassLoader.getSystemClassLoader().getResourceAsStream("compiled/basic.c.wasm");
+var is = WasmCorpus.getCompiledAsStream("basic.c.wasm");
 Instance.builder(Parser.parse(is)).withMachineFactory(AotMachine::new).build();
 ```

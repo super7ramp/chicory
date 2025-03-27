@@ -5,14 +5,23 @@ import static com.google.testing.compile.Compiler.javac;
 
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.JavaFileObjects;
+import java.io.File;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class HostModuleProcessorTest {
+
+    private static final Iterable<File> CLASSPATH =
+            List.of(
+                    new File("../annotations/target/classes"),
+                    new File("../../runtime/target/classes"),
+                    new File("../../wasm/target/classes"));
 
     @Test
     void generateModules() {
         Compilation compilation =
                 javac().withProcessors(new HostModuleProcessor())
+                        .withClasspath(CLASSPATH)
                         .compile(
                                 JavaFileObjects.forResource("BasicMath.java"),
                                 JavaFileObjects.forResource("Box.java"),
@@ -42,6 +51,7 @@ class HostModuleProcessorTest {
     void invalidParameterTypeUnsupported() {
         Compilation compilation =
                 javac().withProcessors(new HostModuleProcessor())
+                        .withClasspath(CLASSPATH)
                         .compile(JavaFileObjects.forResource("InvalidParameterUnsupported.java"));
 
         assertThat(compilation).failed();
@@ -56,6 +66,7 @@ class HostModuleProcessorTest {
     void invalidParameterTypeString() {
         Compilation compilation =
                 javac().withProcessors(new HostModuleProcessor())
+                        .withClasspath(CLASSPATH)
                         .compile(JavaFileObjects.forResource("InvalidParameterString.java"));
 
         assertThat(compilation).failed();
@@ -70,6 +81,7 @@ class HostModuleProcessorTest {
     void invalidReturnType() {
         Compilation compilation =
                 javac().withProcessors(new HostModuleProcessor())
+                        .withClasspath(CLASSPATH)
                         .compile(JavaFileObjects.forResource("InvalidReturn.java"));
 
         assertThat(compilation).failed();

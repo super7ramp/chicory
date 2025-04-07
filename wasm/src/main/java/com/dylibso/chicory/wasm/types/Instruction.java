@@ -3,7 +3,7 @@ package com.dylibso.chicory.wasm.types;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Instruction {
+public class Instruction implements Operands {
     public static final long[] EMPTY_OPERANDS = new long[0];
 
     private final int address;
@@ -32,6 +32,7 @@ public class Instruction {
         return operands.length;
     }
 
+    @Override
     public long operand(int index) {
         return operands[index];
     }

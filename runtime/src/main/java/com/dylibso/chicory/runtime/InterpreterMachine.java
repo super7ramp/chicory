@@ -11,6 +11,7 @@ import com.dylibso.chicory.wasm.types.CatchOpCode;
 import com.dylibso.chicory.wasm.types.FunctionType;
 import com.dylibso.chicory.wasm.types.Instruction;
 import com.dylibso.chicory.wasm.types.OpCode;
+import com.dylibso.chicory.wasm.types.Operands;
 import com.dylibso.chicory.wasm.types.Value;
 import com.dylibso.chicory.wasm.types.ValueType;
 import java.util.ArrayDeque;
@@ -32,11 +33,6 @@ public class InterpreterMachine implements Machine {
         this.instance = instance;
         stack = new MStack();
         this.callStack = new ArrayDeque<>();
-    }
-
-    @FunctionalInterface
-    protected interface Operands {
-        long get(int index);
     }
 
     @SuppressWarnings("DoNotCallSuggester")
@@ -157,7 +153,7 @@ public class InterpreterMachine implements Machine {
             //                                + " stack="
             //                                + stack);
             var opcode = instruction.opcode();
-            Operands operands = instruction::operand;
+            Operands operands = instruction;
             instance.onExecution(instruction, stack);
             switch (opcode) {
                 case UNREACHABLE:

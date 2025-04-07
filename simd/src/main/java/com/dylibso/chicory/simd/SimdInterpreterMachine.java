@@ -9,6 +9,7 @@ import com.dylibso.chicory.runtime.StackFrame;
 import com.dylibso.chicory.wasm.ChicoryException;
 import com.dylibso.chicory.wasm.types.Instruction;
 import com.dylibso.chicory.wasm.types.OpCode;
+import com.dylibso.chicory.wasm.types.Operands;
 import com.dylibso.chicory.wasm.types.Value;
 import java.util.Arrays;
 import java.util.Deque;

@@ -34,7 +34,6 @@ public enum ValueType {
 
     /**
      * @return the size of this type in memory
-     *
      * @throws IllegalStateException if the type cannot be stored in memory
      */
     public int size() {
@@ -128,7 +127,6 @@ public enum ValueType {
 
     /**
      * @return the {@code ValueType} for the given ID value
-     *
      * @throws IllegalArgumentException if the ID value does not correspond to a valid value type
      */
     public static ValueType forId(int id) {
@@ -156,7 +154,6 @@ public enum ValueType {
 
     /**
      * @return the reference-typed {@code ValueType} for the given ID value
-     *
      * @throws IllegalArgumentException if the ID value does not correspond to a valid reference type
      */
     public static ValueType refTypeForId(int id) {
@@ -174,8 +171,9 @@ public enum ValueType {
 
     public static int sizeOf(List<ValueType> args) {
         int total = 0;
-        for (var a : args) {
-            if (a == ValueType.V128) {
+        // not using enhanced for loop to avoid memory allocations
+        for (int i = 0; i < args.size(); i++) {
+            if (args.get(i) == ValueType.V128) {
                 total += 2;
             } else {
                 total += 1;

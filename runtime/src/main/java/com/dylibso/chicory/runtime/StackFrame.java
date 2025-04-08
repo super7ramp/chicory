@@ -1,6 +1,8 @@
 package com.dylibso.chicory.runtime;
 
 import static com.dylibso.chicory.wasm.types.ValueType.sizeOf;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 import com.dylibso.chicory.wasm.types.AnnotatedInstruction;
 import com.dylibso.chicory.wasm.types.OpCode;
@@ -199,20 +201,14 @@ public class StackFrame {
 
     static void doControlTransfer(CtrlFrame ctrlFrame, MStack stack) {
         var endResults = ctrlFrame.startValues + ctrlFrame.endValues; // unwind stack
-        long[] returns = new long[endResults];
-        for (int i = 0; i < returns.length; i++) {
-            if (stack.size() > 0) {
-                returns[i] = stack.pop();
-            }
-        }
+        final long[] stackArray = stack.array();
+        final int srcPos = max(stack.size() - endResults, 0);
+        final int destPos = min(srcPos, ctrlFrame.height);
 
-        while (stack.size() > ctrlFrame.height) {
+        System.arraycopy(stackArray, srcPos, stackArray, destPos, endResults);
+
+        while (stack.size() > ctrlFrame.height + endResults) {
             stack.pop();
-        }
-
-        for (int i = 0; i < returns.length; i++) {
-            long value = returns[returns.length - 1 - i];
-            stack.push(value);
         }
     }
 }

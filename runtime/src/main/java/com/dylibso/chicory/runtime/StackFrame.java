@@ -155,11 +155,11 @@ public class StackFrame {
     }
 
     void pushCtrl(OpCode opcode, int startValues, int returnValues, int height) {
-        ctrlStack.add(new CtrlFrame(opcode, startValues, returnValues, height));
+        ctrlStack.add(CtrlFrame.of(opcode, startValues, returnValues, height));
     }
 
     void pushCtrl(OpCode opcode, int startValues, int returnValues, int height, int pc) {
-        ctrlStack.add(new CtrlFrame(opcode, startValues, returnValues, height, pc));
+        ctrlStack.add(CtrlFrame.of(opcode, startValues, returnValues, height, pc));
     }
 
     int ctrlStackSize() {
